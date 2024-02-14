@@ -49,16 +49,27 @@ function sendIdsToServer(ids) {
 
 // Функция обновления страницы с данными из ответа сервера
 function updatePage(data) {
-    // Находим тег <td> с указанным стилем
-    var tdElement = document.querySelector('td[align="center"] > span[style="color:#4AC5FA;font-family:arial;font-size:14px; letter-spacing: 2px"]');
-    // Если тег найден
-    if (tdElement) {
-        // Отображаем полученные данные внутри тега
-        tdElement.innerHTML = JSON.stringify(data);
-    } else {
-        // Если тег не найден, выводим сообщение об ошибке в консоль
-        console.error("Тег <td> с указанным стилем не найден на странице.");
-    }
+    // Находим все блоки <td> с id, содержащим "Offers_"
+    var tdElements = document.querySelectorAll('td[id^="Offers_"]');
+    
+    // Проходимся по всем найденным элементам
+    tdElements.forEach(function(tdElement) {
+        // Получаем id текущего элемента
+        var id = tdElement.id;
+        
+        // Извлекаем номер предложения из id элемента
+        var offerId = id.substring("Offers_".length);
+        
+        // Проверяем, есть ли значение для этого предложения в данных с сервера
+        if (data.hasOwnProperty(id)) {
+            // Создаем элемент для вставки значения из ответа с сервера
+            var responseElement = document.createElement('div');
+            responseElement.innerHTML = '<table><tbody><tr><td>' + data[id] + ' Р' + '</td></tr></tbody></table>';
+            
+            // Вставляем элемент с ответом перед закрывающим тегом </td>
+            tdElement.appendChild(responseElement);
+        }
+    });
 }
 
 // Обработчик события загрузки страницы
@@ -77,6 +88,7 @@ window.onload = function() {
     // Отправляем массив id без префикса "Offers_" на сервер
     sendIdsToServer(ids);
 };
+
 
 
 
