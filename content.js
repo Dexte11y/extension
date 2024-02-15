@@ -1,7 +1,5 @@
-// Функция отправки массива id без префикса "Offers_" на сервер
 function sendIdsToServer(ids) {
     // Проверяем текущий URL страницы
-    if (window.location.href.startsWith('https://optvideo.com/')) {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "http://127.0.0.1:8000/oreon_bestprice", true);
         xhr.setRequestHeader("Content-Type", "application/json");
@@ -17,9 +15,6 @@ function sendIdsToServer(ids) {
             }
         };
         xhr.send(JSON.stringify({ids: ids}));
-    } else {
-        console.log("Текущий сайт не соответствует условию отправки запроса.");
-    }
 }
 
 // Функция обновления страницы с данными из ответа сервера
@@ -50,7 +45,6 @@ function updatePage(data) {
 // Обработчик события загрузки страницы
 window.onload = function() {
     // Проверяем текущий URL страницы
-    if (window.location.href.startsWith('https://optvideo.com/')) {
         // Сканируем все блоки <td> с id, содержащим "Offers_"
         var tdElements = document.querySelectorAll('td[id^="Offers_"]');
         // Инициализируем пустой массив для хранения id без префикса "Offers_"
@@ -64,9 +58,6 @@ window.onload = function() {
         });
         // Отправляем массив id без префикса "Offers_" на сервер
         sendIdsToServer(ids);
-    } else {
-        console.log("Текущий сайт не соответствует условию отправки запроса.");
-    }
 };
 
 
